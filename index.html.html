@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>위즈피아올린음악학원</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5B0;
+    --gold-dark: #8B6914;
+    --cream: #FAF8F3;
+    --dark: #1A1814;
+    --dark2: #2D2A24;
+    --dark3: #3E3A32;
+    --mid: #6B6558;
+    --light: #F0ECE3;
+    --white: #FEFDFB;
+    --accent: #7A9E8E;
+    --accent2: #8B7355;
+    --red: #C0392B;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans KR',sans-serif; background:var(--dark); color:var(--cream); min-height:100vh; }
+
+  /* ─── LOGIN ─── */
+  #loginScreen {
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, #1A1814 0%, #2D2820 50%, #1A1814 100%);
+    position:relative; overflow:hidden;
+  }
+  #loginScreen::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(201,169,110,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(122,158,142,0.06) 0%, transparent 60%);
+  }
+  .login-box {
+    background: rgba(42,38,32,0.95);
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 4px;
+    padding: 56px 48px;
+    width: 420px;
+    position:relative;
+    z-index:1;
+  }
+  .login-logo {
+    text-align:center; margin-bottom:40px;
+  }
+  .login-logo .en {
+    font-family:'Cormorant Garamond',serif;
+    font-size:13px; font-weight:300; letter-spacing:4px;
+    color:var(--gold); text-transform:uppercase; display:block; margin-bottom:10px;
+  }
+  .login-logo .ko {
+    font-family:'Noto Serif KR',serif;
+    font-size:22px; font-weight:300; color:var(--cream); display:block;
+    letter-spacing:2px;
+  }
+  .login-divider {
+    width:40px; height:1px; background:var(--gold); margin:16px auto;
+  }
+  .login-field { margin-bottom:16px; }
+  .login-field label {
+    display:block; font-size:11px; letter-spacing:2px; color:var(--gold);
+    text-transform:uppercase; margin-bottom:8px; font-weight:500;
+  }
+  .login-field input {
+    width:100%; padding:12px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius:2px; color:var(--cream);
+    font-family:'Noto Sans KR',sans-serif; font-size:14px;
+    outline:none; transition:border-color 0.2s;
+  }
+  .login-field input:focus { border-color: rgba(201,169,110,0.6); }
+  .login-btn {
+    width:100%; padding:14px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    border:none; border-radius:2px; color:var(--dark);
+    font-family:'Noto Sans KR',sans-serif; font-size:14px; font-weight:700;
+    letter-spacing:2px; cursor:pointer; margin-top:24px;
+    transition:opacity 0.2s;
+  }
+  .login-btn:hover { opacity:0.85; }
+  .login-error {
+    background:rgba(192,57,43,0.15); border:1px solid rgba(192,57,43,0.3);
+    color:#E87B6E; font-size:12px; padding:10px 14px; border-radius:2px;
+    margin-top:12px; text-align:center; display:none;
+  }
+
+  /* ─── MAIN APP ─── */
+  #app { display:none; min-height:100vh; }
+
+  /* HEADER */
+  .header {
+    background:var(--dark2); border-bottom:1px solid rgba(201,169,110,0.15);
+    padding:0 40px; display:flex; align-items:center; justify-content:space-between;
+    height:70px; position:sticky; top:0; z-index:100;
+  }
+  .header-logo {
+    font-family:'Noto Serif KR',serif; font-size:18px; font-weight:300;
+    color:var(--cream); letter-spacing:1px;
+  }
+  .header-logo span { color:var(--gold); }
+  .header-nav { display:flex; gap:4px; }
+  .nav-btn {
+    padding:8px 18px; background:transparent; border:none;
+    color:var(--mid); font-family:'Noto Sans KR',sans-serif; font-size:13px;
+    cursor:pointer; border-radius:2px; transition:all 0.2s; letter-spacing:0.5px;
+  }
+  .nav-btn:hover, .nav-btn.active { color:var(--gold); background:rgba(201,169,110,0.08); }
+  .header-user {
+    display:flex; align-items:center; gap:12px;
+  }
+  .user-badge {
+    background:rgba(201,169,110,0.12); border:1px solid rgba(201,169,110,0.2);
+    color:var(--gold); font-size:12px; padding:4px 12px; border-radius:20px;
+    letter-spacing:0.5px;
+  }
+  .user-badge.admin { background:rgba(201,169,110,0.2); }
+  .logout-btn {
+    background:transparent; border:1px solid rgba(255,255,255,0.1);
+    color:var(--mid); font-size:12px; padding:5px 12px; border-radius:2px;
+    cursor:pointer; transition:all 0.2s; font-family:'Noto Sans KR',sans-serif;
+  }
+  .logout-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* PAGE CONTENT */
+  .page { display:none; padding:40px; max-width:1200px; margin:0 auto; }
+  .page.active { display:block; }
+  .page-title {
+    font-family:'Noto Serif KR',serif; font-size:28px; font-weight:300;
+    color:var(--cream); margin-bottom:8px; letter-spacing:1px;
+  }
+  .page-subtitle {
+    font-size:13px; color:var(--mid); margin-bottom:40px; letter-spacing:0.5px;
+  }
+  .gold-line { width:40px; height:2px; background:var(--gold); margin-bottom:32px; }
+
+  /* CARDS */
+  .card {
+    background:var(--dark2); border:1px solid rgba(201,169,110,0.12);
+    border-radius:3px; padding:28px; margin-bottom:20px;
+  }
+  .card-title {
+    font-family:'Noto Serif KR',serif; font-size:16px; font-weight:400;
+    color:var(--gold); margin-bottom:16px; letter-spacing:0.5px;
+  }
+
+  /* ADMIN STUDENT SELECTOR */
+  .student-grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px;
+    margin-bottom:32px;
+  }
+  .student-chip {
+    padding:10px 8px; background:var(--dark3); border:1px solid rgba(255,255,255,0.06);
+    border-radius:2px; text-align:center; cursor:pointer; transition:all 0.2s;
+    font-size:12px; color:var(--mid);
+  }
+  .student-chip:hover { border-color:rgba(201,169,110,0.3); color:var(--cream); }
+  .student-chip.selected { border-color:var(--gold); color:var(--gold); background:rgba(201,169,110,0.08); }
+  .student-id { font-size:10px; color:var(--mid); margin-top:3px; }
+
+  /* TIMETABLE */
+  .month-nav {
+    display:flex; align-items:center; gap:16px; margin-bottom:24px;
+  }
+  .month-nav button {
+    background:transparent; border:1px solid rgba(201,169,110,0.2);
+    color:var(--gold); width:32px; height:32px; border-radius:2px;
+    cursor:pointer; font-size:16px; transition:all 0.2s;
+  }
+  .month-nav button:hover { background:rgba(201,169,110,0.1); }
+  .month-label {
+    font-family:'Noto Serif KR',serif; font-size:18px; color:var(--cream);
+    font-weight:300; min-width:140px; text-align:center;
+  }
+  .calendar {
+    display:grid; grid-template-columns:repeat(7,1fr); gap:1px;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.06);
+    border-radius:3px; overflow:hidden;
+  }
+  .cal-head {
+    background:var(--dark3); padding:10px 0; text-align:center;
+    font-size:11px; letter-spacing:1px; color:var(--mid); font-weight:500;
+  }
+  .cal-head:first-child { color:#e87b6e; }
+  .cal-head:last-child { color:#7B9FCF; }
+  .cal-day {
+    background:var(--dark2); padding:8px; min-height:72px;
+    cursor:pointer; transition:background 0.15s; position:relative;
+  }
+  .cal-day:hover { background:rgba(201,169,110,0.05); }
+  .cal-day.other-month .day-num { color:rgba(255,255,255,0.15); }
+  .cal-day.today .day-num {
+    background:var(--gold); color:var(--dark); border-radius:50%;
+    width:22px; height:22px; display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+  }
+  .day-num { font-size:12px; color:var(--mid); margin-bottom:4px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; }
+  .cal-day:nth-child(7n+1) .day-num { color:#e87b6e; }
+  .cal-day:nth-child(7n) .day-num { color:#7B9FCF; }
+  .lesson-tag {
+    font-size:10px; background:rgba(201,169,110,0.15); color:var(--gold);
+    border-radius:2px; padding:2px 5px; margin-bottom:2px; display:block;
+    line-height:1.4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .add-lesson-modal {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    z-index:200; align-items:center; justify-content:center;
+  }
+  .add-lesson-modal.show { display:flex; }
+  .modal-box {
+    background:var(--dark2); border:1px solid rgba(201,169,110,0.25);
+    border-radius:4px; padding:36px; width:380px;
+  }
+  .modal-title { font-family:'Noto Serif KR',serif; font-size:18px; color:var(--cream); margin-bottom:8px; }
+  .modal-date { font-size:13px; color:var(--gold); margin-bottom:24px; }
+  .modal-field { margin-bottom:16px; }
+  .modal-field label { display:block; font-size:11px; letter-spacing:1.5px; color:var(--gold); margin-bottom:6px; text-transform:uppercase; }
+  .modal-field input, .modal-field textarea, .modal-field select {
+    width:100%; padding:10px 12px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.2);
+    border-radius:2px; color:var(--cream);
+    font-family:'Noto Sans KR',sans-serif; font-size:13px; outline:none;
+  }
+  .modal-field textarea { height:80px; resize:vertical; }
+  .modal-actions { display:flex; gap:10px; margin-top:24px; }
+  .btn-primary {
+    flex:1; padding:11px; background:linear-gradient(135deg,var(--gold-dark),var(--gold));
+    border:none; border-radius:2px; color:var(--dark); font-weight:700;
+    font-size:13px; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+    transition:opacity 0.2s;
+  }
+  .btn-primary:hover { opacity:0.85; }
+  .btn-secondary {
+    flex:1; padding:11px; background:transparent;
+    border:1px solid rgba(255,255,255,0.12); border-radius:2px; color:var(--mid);
+    font-size:13px; cursor:pointer; font-family:'Noto Sans KR',sans-serif;
+    transition:all 0.2s;
+  }
+  .btn-secondary:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* PROGRESS */
+  .progress-section { margin-bottom:32px; }
+  .progress-label {
+    font-size:12px; letter-spacing:1.5px; color:var(--gold); text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .progress-textarea {
+    width:100%; padding:14px 16px; min-height:120px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.2);
+    border-radius:2px; color:var(--cream);
+    font-family:'Noto Sans KR',sans-serif; font-size:14px;
+    line-height:1.7; outline:none; resize:vertical;
+    transition:border-color 0.2s;
+  }
+  .progress-textarea:focus { border-color:rgba(201,169,110,0.5); }
+  .progress-display {
+    padding:16px; background:rgba(255,255,255,0.03);
+    border-left:2px solid var(--gold); border-radius:0 2px 2px 0;
+    font-size:14px; line-height:1.8; color:var(--cream); white-space:pre-wrap;
+    min-height:60px;
+  }
+  .progress-empty { color:var(--mid); font-style:italic; font-size:13px; }
+  .save-btn {
+    padding:9px 20px; background:transparent;
+    border:1px solid rgba(201,169,110,0.35); border-radius:2px;
+    color:var(--gold); font-size:12px; letter-spacing:1px; cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif; transition:all 0.2s; margin-top:10px;
+  }
+  .save-btn:hover { background:rgba(201,169,110,0.1); }
+  .saved-msg {
+    font-size:11px; color:var(--accent); margin-left:10px; opacity:0;
+    transition:opacity 0.3s;
+  }
+  .saved-msg.show { opacity:1; }
+
+  /* VIDEOS */
+  .video-upload-area {
+    border:2px dashed rgba(201,169,110,0.2); border-radius:3px;
+    padding:40px; text-align:center; cursor:pointer; transition:all 0.2s;
+    margin-bottom:24px;
+  }
+  .video-upload-area:hover { border-color:rgba(201,169,110,0.5); background:rgba(201,169,110,0.03); }
+  .upload-icon { font-size:32px; margin-bottom:10px; opacity:0.5; }
+  .upload-text { font-size:14px; color:var(--mid); }
+  .upload-text strong { color:var(--gold); }
+  #videoFileInput { display:none; }
+  .video-meta-form { display:none; margin-bottom:24px; }
+  .video-meta-form.show { display:block; }
+  .video-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; }
+  .video-card {
+    background:var(--dark2); border:1px solid rgba(255,255,255,0.06);
+    border-radius:3px; overflow:hidden; transition:border-color 0.2s;
+  }
+  .video-card:hover { border-color:rgba(201,169,110,0.2); }
+  .video-thumb {
+    width:100%; aspect-ratio:16/9; background:var(--dark3);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; position:relative; overflow:hidden;
+  }
+  .video-thumb video { width:100%; height:100%; object-fit:cover; }
+  .play-overlay {
+    position:absolute; inset:0; background:rgba(0,0,0,0.4);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; transition:opacity 0.2s;
+  }
+  .video-thumb:hover .play-overlay { opacity:1; }
+  .play-btn-icon {
+    width:44px; height:44px; background:rgba(201,169,110,0.9);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+  }
+  .play-btn-icon svg { margin-left:3px; }
+  .video-info { padding:14px; }
+  .video-title-text { font-size:14px; color:var(--cream); font-weight:500; margin-bottom:4px; }
+  .video-date { font-size:11px; color:var(--mid); }
+  .video-delete {
+    background:transparent; border:none; color:rgba(192,57,43,0.5);
+    font-size:11px; cursor:pointer; float:right; padding:0;
+    transition:color 0.2s;
+  }
+  .video-delete:hover { color:var(--red); }
+
+  /* VIDEO MODAL */
+  .video-player-modal {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9);
+    z-index:300; align-items:center; justify-content:center;
+  }
+  .video-player-modal.show { display:flex; }
+  .video-player-inner { width:min(90vw,900px); position:relative; }
+  .video-player-inner video { width:100%; border-radius:3px; }
+  .video-close {
+    position:absolute; top:-36px; right:0; background:transparent;
+    border:none; color:var(--mid); font-size:24px; cursor:pointer;
+    transition:color 0.2s;
+  }
+  .video-close:hover { color:var(--cream); }
+  .video-player-title {
+    font-size:14px; color:var(--gold); margin-top:12px;
+    font-family:'Noto Serif KR',serif;
+  }
+
+  /* RECITAL */
+  .recital-list { }
+  .recital-item {
+    background:var(--dark3); border:1px solid rgba(255,255,255,0.06);
+    border-radius:2px; padding:20px 24px; margin-bottom:12px;
+    display:flex; align-items:center; gap:20px;
+  }
+  .recital-date-badge {
+    text-align:center; min-width:54px;
+  }
+  .recital-month { font-size:11px; color:var(--gold); letter-spacing:1px; text-transform:uppercase; }
+  .recital-day { font-size:28px; font-weight:300; color:var(--cream); font-family:'Cormorant Garamond',serif; line-height:1; }
+  .recital-body { flex:1; }
+  .recital-title-text { font-size:15px; color:var(--cream); margin-bottom:4px; }
+  .recital-detail { font-size:12px; color:var(--mid); }
+  .recital-badge {
+    font-size:10px; letter-spacing:1px; padding:3px 10px;
+    border-radius:20px; border:1px solid rgba(201,169,110,0.3); color:var(--gold);
+  }
+  .delete-recital-btn {
+    background:transparent; border:none; color:rgba(192,57,43,0.4);
+    cursor:pointer; font-size:18px; transition:color 0.2s; line-height:1;
+  }
+  .delete-recital-btn:hover { color:var(--red); }
+  .add-recital-form {
+    background:var(--dark3); border:1px solid rgba(201,169,110,0.15);
+    border-radius:3px; padding:24px; margin-bottom:24px;
+  }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+
+  /* ACADEMY INFO */
+  .info-section { margin-bottom:32px; }
+  .info-section-title {
+    font-size:11px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:10px;
+  }
+  .info-section-title::after { content:''; flex:1; height:1px; background:rgba(201,169,110,0.15); }
+  .info-display {
+    font-size:14px; color:var(--cream); line-height:1.8;
+    white-space:pre-wrap;
+  }
+  .info-item { display:flex; gap:16px; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .info-label { min-width:80px; font-size:12px; color:var(--gold); letter-spacing:0.5px; padding-top:1px; }
+  .info-value { font-size:14px; color:var(--cream); }
+  .info-textarea {
+    width:100%; padding:14px 16px; min-height:100px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.2);
+    border-radius:2px; color:var(--cream);
+    font-family:'Noto Sans KR',sans-serif; font-size:14px;
+    line-height:1.7; outline:none; resize:vertical;
+  }
+  .info-input {
+    width:100%; padding:10px 12px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(201,169,110,0.2);
+    border-radius:2px; color:var(--cream);
+    font-family:'Noto Sans KR',sans-serif; font-size:14px; outline:none;
+    margin-bottom:10px;
+  }
+
+  /* WELCOME HOME */
+  .welcome-section {
+    text-align:center; padding:60px 20px;
+  }
+  .welcome-en {
+    font-family:'Cormorant Garamond',serif; font-size:13px; font-weight:300;
+    letter-spacing:5px; color:var(--gold); text-transform:uppercase; margin-bottom:16px;
+  }
+  .welcome-ko {
+    font-family:'Noto Serif KR',serif; font-size:32px; font-weight:300;
+    color:var(--cream); margin-bottom:24px; letter-spacing:2px;
+  }
+  .welcome-divider { width:50px; height:1px; background:var(--gold); margin:0 auto 24px; }
+  .welcome-sub { font-size:14px; color:var(--mid); line-height:1.8; max-width:500px; margin:0 auto; }
+  .quick-cards {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px;
+    margin-top:48px;
+  }
+  .quick-card {
+    background:var(--dark2); border:1px solid rgba(201,169,110,0.1);
+    border-radius:3px; padding:24px 20px; cursor:pointer; transition:all 0.2s;
+    text-align:center;
+  }
+  .quick-card:hover { border-color:rgba(201,169,110,0.3); background:rgba(201,169,110,0.04); }
+  .quick-icon { font-size:24px; margin-bottom:12px; }
+  .quick-label { font-size:14px; color:var(--cream); font-weight:500; margin-bottom:4px; }
+  .quick-desc { font-size:12px; color:var(--mid); }
+
+  /* TABS */
+  .section-tabs { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; }
+  .section-tab {
+    padding:7px 16px; background:transparent; border:1px solid rgba(255,255,255,0.08);
+    border-radius:2px; color:var(--mid); font-size:12px; cursor:pointer;
+    transition:all 0.2s; font-family:'Noto Sans KR',sans-serif; letter-spacing:0.5px;
+  }
+  .section-tab:hover, .section-tab.active { border-color:var(--gold); color:var(--gold); background:rgba(201,169,110,0.07); }
+
+  /* EMPTY STATE */
+  .empty-state { text-align:center; padding:48px 20px; color:var(--mid); }
+  .empty-state p { font-size:14px; margin-bottom:8px; }
+  .empty-state small { font-size:12px; opacity:0.6; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--dark); }
+  ::-webkit-scrollbar-thumb { background:rgba(201,169,110,0.2); border-radius:3px; }
+
+  /* RESPONSIVE */
+  @media(max-width:768px) {
+    .header { padding:0 16px; }
+    .header-nav { display:none; }
+    .page { padding:20px 16px; }
+    .form-grid { grid-template-columns:1fr; }
+    .login-box { width:340px; padding:40px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <span class="en">Wizpia Violin Music Academy</span>
+      <div class="login-divider"></div>
+      <span class="ko">위즈피아올린음악학원</span>
+    </div>
+    <div class="login-field">
+      <label>아이디</label>
+      <input type="text" id="loginId" placeholder="아이디를 입력하세요" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>비밀번호</label>
+      <input type="password" id="loginPw" placeholder="비밀번호를 입력하세요" autocomplete="current-password">
+    </div>
+    <button class="login-btn" onclick="doLogin()">로그인</button>
+    <div class="login-error" id="loginError">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="header">
+    <div class="header-logo">위즈피아 <span>올린</span>음악학원</div>
+    <div class="header-nav">
+      <button class="nav-btn active" onclick="showPage('home')">홈</button>
+      <button class="nav-btn" onclick="showPage('timetable')">시간표</button>
+      <button class="nav-btn" onclick="showPage('progress')">진도</button>
+      <button class="nav-btn" onclick="showPage('videos')">연주 영상</button>
+      <button class="nav-btn" onclick="showPage('recital')">리사이틀 일정표</button>
+      <button class="nav-btn" onclick="showPage('info')">학원 정보</button>
+    </div>
+    <div class="header-user">
+      <div class="user-badge" id="userBadge"></div>
+      <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="welcome-section">
+      <div class="welcome-en">Welcome to Wizpia</div>
+      <div class="welcome-ko">위즈피아올린음악학원</div>
+      <div class="welcome-divider"></div>
+      <div class="welcome-sub" id="welcomeText">안녕하세요. 위즈피아올린음악학원 학부모 포털에 오신 것을 환영합니다.</div>
+    </div>
+    <div class="quick-cards">
+      <div class="quick-card" onclick="showPage('timetable')">
+        <div class="quick-icon">📅</div>
+        <div class="quick-label">시간표</div>
+        <div class="quick-desc">수업 일정 확인</div>
+      </div>
+      <div class="quick-card" onclick="showPage('progress')">
+        <div class="quick-icon">📊</div>
+        <div class="quick-label">진도</div>
+        <div class="quick-desc">학습 진행 현황</div>
+      </div>
+      <div class="quick-card" onclick="showPage('videos')">
+        <div class="quick-icon">🎻</div>
+        <div class="quick-label">연주 영상</div>
+        <div class="quick-desc">연주 영상 시청</div>
+      </div>
+      <div class="quick-card" onclick="showPage('recital')">
+        <div class="quick-icon">🎼</div>
+        <div class="quick-label">리사이틀 일정</div>
+        <div class="quick-desc">발표회 일정 확인</div>
+      </div>
+      <div class="quick-card" onclick="showPage('info')">
+        <div class="quick-icon">🏫</div>
+        <div class="quick-label">학원 정보</div>
+        <div class="quick-desc">연락처 및 안내</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMETABLE -->
+  <div class="page" id="page-timetable">
+    <div class="page-title">시간표</div>
+    <div class="page-subtitle">수업 일정을 달력으로 확인하세요</div>
+    <div class="gold-line"></div>
+
+    <!-- Admin: student selector -->
+    <div id="timetableAdminPanel" style="display:none;">
+      <div class="card" style="margin-bottom:28px;">
+        <div class="card-title">학생 선택</div>
+        <div class="student-grid" id="ttStudentGrid"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="month-nav">
+        <button onclick="changeMonth(-1)">‹</button>
+        <div class="month-label" id="monthLabel"></div>
+        <button onclick="changeMonth(1)">›</button>
+      </div>
+      <div class="calendar" id="calendarGrid"></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="page" id="page-progress">
+    <div class="page-title">진도</div>
+    <div class="page-subtitle">학생의 현재 학습 진행 상황을 확인하세요</div>
+    <div class="gold-line"></div>
+
+    <!-- Admin -->
+    <div id="progressAdminPanel" style="display:none;">
+      <div class="card">
+        <div class="card-title">학생 선택</div>
+        <div class="student-grid" id="progressStudentGrid"></div>
+      </div>
+      <div class="card" id="progressEditCard" style="display:none;">
+        <div class="card-title" id="progressEditTitle">진도 작성</div>
+        <div class="progress-section">
+          <div class="progress-label">현재 교재 / 곡</div>
+          <input type="text" class="info-input" id="progressBook" placeholder="예: 스즈키 바이올린 2권, 가보트">
+        </div>
+        <div class="progress-section">
+          <div class="progress-label">진도 현황 및 메모</div>
+          <textarea class="progress-textarea" id="progressText" placeholder="학생의 진도 내용을 자세히 작성해주세요..."></textarea>
+        </div>
+        <div>
+          <button class="save-btn" onclick="saveProgress()">저장</button>
+          <span class="saved-msg" id="progressSaved">저장되었습니다 ✓</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parent view -->
+    <div id="progressParentPanel" style="display:none;">
+      <div class="card">
+        <div class="card-title">현재 교재 / 곡</div>
+        <div class="progress-display" id="progressBookDisplay"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">진도 현황</div>
+        <div class="progress-display" id="progressDisplay"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEOS -->
+  <div class="page" id="page-videos">
+    <div class="page-title">연주 영상</div>
+    <div class="page-subtitle">학생의 연주 영상을 확인하세요</div>
+    <div class="gold-line"></div>
+
+    <!-- Admin upload -->
+    <div id="videosAdminPanel" style="display:none;">
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-title">학생 선택</div>
+        <div class="student-grid" id="videoStudentGrid"></div>
+      </div>
+      <div id="videoUploadSection" style="display:none;">
+        <div class="video-upload-area" onclick="document.getElementById('videoFileInput').click()">
+          <div class="upload-icon">▲</div>
+          <div class="upload-text"><strong>영상 파일을 클릭하여 업로드</strong><br>MP4, MOV, AVI 지원</div>
+        </div>
+        <input type="file" id="videoFileInput" accept="video/*" onchange="handleVideoSelect(event)">
+        <div class="video-meta-form card" id="videoMetaForm">
+          <div class="card-title">영상 정보 입력</div>
+          <div class="modal-field">
+            <label>제목</label>
+            <input type="text" id="videoTitle" placeholder="예: 스즈키 2권 가보트 연주">
+          </div>
+          <div class="modal-field">
+            <label>날짜</label>
+            <input type="date" id="videoDate">
+          </div>
+          <div style="display:flex;gap:10px;margin-top:16px;">
+            <button class="btn-primary" onclick="uploadVideo()">업로드</button>
+            <button class="btn-secondary" onclick="cancelVideoUpload()">취소</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="videoListSection">
+      <div class="video-grid" id="videoGrid"></div>
+      <div class="empty-state" id="videoEmpty" style="display:none;">
+        <p>등록된 영상이 없습니다</p>
+        <small>원장님이 영상을 업로드하면 여기서 확인할 수 있습니다</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECITAL -->
+  <div class="page" id="page-recital">
+    <div class="page-title">리사이틀 일정표</div>
+    <div class="page-subtitle">발표회 및 행사 일정을 확인하세요</div>
+    <div class="gold-line"></div>
+
+    <!-- Admin add form -->
+    <div id="recitalAdminPanel" style="display:none;">
+      <div class="add-recital-form">
+        <div class="card-title" style="margin-bottom:20px;">새 일정 추가</div>
+        <div class="form-grid">
+          <div class="modal-field">
+            <label>제목</label>
+            <input type="text" id="recitalTitle" placeholder="예: 2025 봄 정기발표회">
+          </div>
+          <div class="modal-field">
+            <label>날짜</label>
+            <input type="date" id="recitalDate">
+          </div>
+          <div class="modal-field">
+            <label>시간</label>
+            <input type="text" id="recitalTime" placeholder="예: 오후 2시">
+          </div>
+          <div class="modal-field">
+            <label>장소</label>
+            <input type="text" id="recitalVenue" placeholder="예: 문화예술회관 소공연장">
+          </div>
+        </div>
+        <div class="modal-field" style="margin-top:4px;">
+          <label>상세 안내</label>
+          <input type="text" id="recitalDetail" placeholder="추가 안내 사항 (선택)">
+        </div>
+        <button class="btn-primary" style="max-width:140px;margin-top:8px;" onclick="addRecital()">일정 추가</button>
+      </div>
+    </div>
+
+    <div class="recital-list" id="recitalList"></div>
+    <div class="empty-state" id="recitalEmpty" style="display:none;">
+      <p>등록된 일정이 없습니다</p>
+      <small>원장님이 일정을 등록하면 여기서 확인할 수 있습니다</small>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="page" id="page-info">
+    <div class="page-title">학원 정보</div>
+    <div class="page-subtitle">위즈피아올린음악학원 안내</div>
+    <div class="gold-line"></div>
+
+    <!-- Admin edit -->
+    <div id="infoAdminPanel" style="display:none;">
+      <div class="card">
+        <div class="card-title">학원 소개 편집</div>
+        <div class="modal-field">
+          <label>학원 소개</label>
+          <textarea class="info-textarea" id="infoIntro" placeholder="학원 소개 내용..."></textarea>
+        </div>
+        <div class="modal-field">
+          <label>전화번호</label>
+          <input type="text" class="info-input" id="infoPhone" placeholder="예: 063-000-0000">
+        </div>
+        <div class="modal-field">
+          <label>이메일</label>
+          <input type="text" class="info-input" id="infoEmail" placeholder="예: wizpia@email.com">
+        </div>
+        <div class="modal-field">
+          <label>주소</label>
+          <input type="text" class="info-input" id="infoAddress" placeholder="예: 전라북도 전주시 ...">
+        </div>
+        <div class="modal-field">
+          <label>운영 시간</label>
+          <input type="text" class="info-input" id="infoHours" placeholder="예: 월~금 14:00 - 21:00">
+        </div>
+        <button class="save-btn" onclick="saveInfo()">저장</button>
+        <span class="saved-msg" id="infoSaved">저장되었습니다 ✓</span>
+      </div>
+    </div>
+
+    <!-- Display -->
+    <div id="infoDisplay">
+      <div class="card">
+        <div class="info-section">
+          <div class="info-section-title">학원 소개</div>
+          <div class="info-display" id="infoIntroDisplay"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="info-section">
+          <div class="info-section-title">연락처</div>
+          <div class="info-item"><div class="info-label">전화</div><div class="info-value" id="infoPhoneDisplay">—</div></div>
+          <div class="info-item"><div class="info-label">이메일</div><div class="info-value" id="infoEmailDisplay">—</div></div>
+          <div class="info-item"><div class="info-label">주소</div><div class="info-value" id="infoAddressDisplay">—</div></div>
+          <div class="info-item" style="border-bottom:none;"><div class="info-label">운영 시간</div><div class="info-value" id="infoHoursDisplay">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Lesson Modal -->
+<div class="add-lesson-modal" id="lessonModal">
+  <div class="modal-box">
+    <div class="modal-title">수업 시간 추가</div>
+    <div class="modal-date" id="modalDateLabel"></div>
+    <div class="modal-field">
+      <label>수업 시간</label>
+      <input type="text" id="lessonTime" placeholder="예: 오후 4:00 - 5:00">
+    </div>
+    <div class="modal-field">
+      <label>메모 (선택)</label>
+      <input type="text" id="lessonMemo" placeholder="예: 레슨, 그룹수업 등">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="addLesson()">추가</button>
+      <button class="btn-secondary" onclick="closeModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+<!-- Video Player Modal -->
+<div class="video-player-modal" id="videoModal">
+  <div class="video-player-inner">
+    <button class="video-close" onclick="closeVideoModal()">✕</button>
+    <video id="modalVideo" controls></video>
+    <div class="video-player-title" id="modalVideoTitle"></div>
+  </div>
+</div>
+
+<script>
+// ─── DATA & AUTH ───────────────────────────────────────
+const ADMIN_ID = 'wizpia_admin';
+const ADMIN_PW = 'admin1234';
+
+// 50 parent accounts
+const STUDENTS = [];
+for(let i=1;i<=50;i++){
+  STUDENTS.push({
+    id:`parent${String(i).padStart(2,'0')}`,
+    pw:`music${String(i).padStart(2,'0')}`,
+    name:`학생${String(i).padStart(2,'0')}`,
+    studentId:`S${String(i).padStart(3,'0')}`
+  });
+}
+
+let currentUser = null;
+let isAdmin = false;
+let currentStudentKey = null;
+
+// Calendar state
+let calYear = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let selectedCalDate = null;
+
+// Video upload state
+let pendingVideoFile = null;
+let pendingVideoUrl = null;
+
+// ─── STORAGE HELPERS ───────────────────────────────────
+function gd(key,def=null){ const v=localStorage.getItem(key); try{return v?JSON.parse(v):def;}catch{return def;} }
+function sd(key,val){ localStorage.setItem(key,JSON.stringify(val)); }
+
+// ─── LOGIN ─────────────────────────────────────────────
+document.getElementById('loginPw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('loginId').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+function doLogin(){
+  const id=document.getElementById('loginId').value.trim();
+  const pw=document.getElementById('loginPw').value.trim();
+  if(id===ADMIN_ID && pw===ADMIN_PW){
+    currentUser={id,name:'원장님'};
+    isAdmin=true;
+    enterApp();
+    return;
+  }
+  const student=STUDENTS.find(s=>s.id===id && s.pw===pw);
+  if(student){
+    currentUser=student;
+    isAdmin=false;
+    currentStudentKey=student.studentId;
+    enterApp();
+    return;
+  }
+  document.getElementById('loginError').style.display='block';
+}
+
+function doLogout(){
+  currentUser=null; isAdmin=false; currentStudentKey=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginId').value='';
+  document.getElementById('loginPw').value='';
+  document.getElementById('loginError').style.display='none';
+}
+
+function enterApp(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  const badge=document.getElementById('userBadge');
+  if(isAdmin){ badge.textContent='원장님'; badge.className='user-badge admin'; }
+  else{ badge.textContent=currentUser.name+' ('+currentUser.studentId+')'; badge.className='user-badge'; }
+  showPage('home');
+  loadInfo();
+  renderInfoDisplay();
+}
+
+// ─── NAVIGATION ────────────────────────────────────────
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const idx=['home','timetable','progress','videos','recital','info'].indexOf(name);
+  document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
+
+  if(name==='timetable') initTimetable();
+  if(name==='progress') initProgress();
+  if(name==='videos') initVideos();
+  if(name==='recital') renderRecital();
+  if(name==='info'){ loadInfo(); renderInfoDisplay(); }
+}
+
+// ─── TIMETABLE ─────────────────────────────────────────
+function initTimetable(){
+  const adminPanel=document.getElementById('timetableAdminPanel');
+  if(isAdmin){
+    adminPanel.style.display='block';
+    const grid=document.getElementById('ttStudentGrid');
+    grid.innerHTML='';
+    STUDENTS.forEach(s=>{
+      const chip=document.createElement('div');
+      chip.className='student-chip'+(currentStudentKey===s.studentId?' selected':'');
+      chip.innerHTML=`<div>${s.name}</div><div class="student-id">${s.studentId}</div>`;
+      chip.onclick=()=>{ currentStudentKey=s.studentId; document.querySelectorAll('#ttStudentGrid .student-chip').forEach(c=>c.classList.remove('selected')); chip.classList.add('selected'); renderCalendar(); };
+      grid.appendChild(chip);
+    });
+    if(!currentStudentKey) currentStudentKey=STUDENTS[0].studentId;
+  } else {
+    adminPanel.style.display='none';
+  }
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const label=document.getElementById('monthLabel');
+  label.textContent=`${calYear}년 ${calMonth+1}월`;
+  const grid=document.getElementById('calendarGrid');
+  grid.innerHTML='';
+  ['일','월','화','수','목','금','토'].forEach(d=>{ const h=document.createElement('div'); h.className='cal-head'; h.textContent=d; grid.appendChild(h); });
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const prevDays=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+  const lessons=gd('lessons_'+currentStudentKey,{});
+  let cells=[];
+  for(let i=0;i<firstDay;i++) cells.push({day:prevDays-firstDay+1+i,cur:false});
+  for(let d=1;d<=daysInMonth;d++) cells.push({day:d,cur:true});
+  while(cells.length%7!==0) cells.push({day:cells.length-firstDay-daysInMonth+1,cur:false});
+  cells.forEach(c=>{
+    const div=document.createElement('div');
+    div.className='cal-day'+(c.cur?'':' other-month');
+    const isToday=c.cur&&c.day===today.getDate()&&calMonth===today.getMonth()&&calYear===today.getFullYear();
+    if(isToday) div.classList.add('today');
+    const numDiv=document.createElement('div');
+    numDiv.className='day-num'; numDiv.textContent=c.day;
+    div.appendChild(numDiv);
+    if(c.cur){
+      const dateKey=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`;
+      if(lessons[dateKey]){
+        lessons[dateKey].forEach(l=>{
+          const tag=document.createElement('span');
+          tag.className='lesson-tag'; tag.textContent=l.time+(l.memo?' · '+l.memo:'');
+          div.appendChild(tag);
+        });
+      }
+      if(isAdmin){
+        div.onclick=()=>openAddLesson(dateKey,c.day);
+        div.title='클릭하여 수업 추가';
+      }
+    }
+    grid.appendChild(div);
+  });
+}
+
+function changeMonth(d){ calMonth+=d; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+
+function openAddLesson(dateKey,day){
+  selectedCalDate=dateKey;
+  document.getElementById('modalDateLabel').textContent=`${calYear}년 ${calMonth+1}월 ${day}일`;
+  document.getElementById('lessonTime').value='';
+  document.getElementById('lessonMemo').value='';
+  document.getElementById('lessonModal').classList.add('show');
+}
+function closeModal(){ document.getElementById('lessonModal').classList.remove('show'); }
+
+function addLesson(){
+  const time=document.getElementById('lessonTime').value.trim();
+  if(!time) return;
+  const key='lessons_'+currentStudentKey;
+  const lessons=gd(key,{});
+  if(!lessons[selectedCalDate]) lessons[selectedCalDate]=[];
+  lessons[selectedCalDate].push({time,memo:document.getElementById('lessonMemo').value.trim()});
+  sd(key,lessons);
+  closeModal();
+  renderCalendar();
+}
+
+// ─── PROGRESS ──────────────────────────────────────────
+function initProgress(){
+  if(isAdmin){
+    document.getElementById('progressAdminPanel').style.display='block';
+    document.getElementById('progressParentPanel').style.display='none';
+    const grid=document.getElementById('progressStudentGrid');
+    grid.innerHTML='';
+    STUDENTS.forEach(s=>{
+      const chip=document.createElement('div');
+      chip.className='student-chip';
+      chip.innerHTML=`<div>${s.name}</div><div class="student-id">${s.studentId}</div>`;
+      chip.onclick=()=>{
+        document.querySelectorAll('#progressStudentGrid .student-chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        loadProgressEdit(s.studentId,s.name);
+      };
+      grid.appendChild(chip);
+    });
+  } else {
+    document.getElementById('progressAdminPanel').style.display='none';
+    document.getElementById('progressParentPanel').style.display='block';
+    const data=gd('progress_'+currentStudentKey,{book:'',text:''});
+    document.getElementById('progressBookDisplay').textContent=data.book||'(아직 작성된 내용이 없습니다)';
+    document.getElementById('progressDisplay').textContent=data.text||'(아직 작성된 내용이 없습니다)';
+    if(!data.book) document.getElementById('progressBookDisplay').classList.add('progress-empty');
+    if(!data.text) document.getElementById('progressDisplay').classList.add('progress-empty');
+  }
+}
+
+function loadProgressEdit(sId,sName){
+  document.getElementById('progressEditCard').style.display='block';
+  document.getElementById('progressEditTitle').textContent=sName+' 진도 작성';
+  const data=gd('progress_'+sId,{book:'',text:''});
+  document.getElementById('progressBook').value=data.book||'';
+  document.getElementById('progressText').value=data.text||'';
+  document.getElementById('progressEditCard').dataset.sid=sId;
+}
+
+function saveProgress(){
+  const sId=document.getElementById('progressEditCard').dataset.sid;
+  const book=document.getElementById('progressBook').value.trim();
+  const text=document.getElementById('progressText').value.trim();
+  sd('progress_'+sId,{book,text});
+  const msg=document.getElementById('progressSaved');
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'),2000);
+}
+
+// ─── VIDEOS ────────────────────────────────────────────
+function initVideos(){
+  const adminPanel=document.getElementById('videosAdminPanel');
+  if(isAdmin){
+    adminPanel.style.display='block';
+    const grid=document.getElementById('videoStudentGrid');
+    grid.innerHTML='';
+    STUDENTS.forEach(s=>{
+      const chip=document.createElement('div');
+      chip.className='student-chip';
+      chip.innerHTML=`<div>${s.name}</div><div class="student-id">${s.studentId}</div>`;
+      chip.onclick=()=>{
+        currentStudentKey=s.studentId;
+        document.querySelectorAll('#videoStudentGrid .student-chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        document.getElementById('videoUploadSection').style.display='block';
+        renderVideos();
+      };
+      grid.appendChild(chip);
+    });
+  } else {
+    adminPanel.style.display='none';
+    renderVideos();
+  }
+}
+
+function renderVideos(){
+  const videos=gd('videos_'+currentStudentKey,[]);
+  const grid=document.getElementById('videoGrid');
+  const empty=document.getElementById('videoEmpty');
+  grid.innerHTML='';
+  if(!videos.length){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  videos.forEach((v,i)=>{
+    const card=document.createElement('div');
+    card.className='video-card';
+    card.innerHTML=`
+      <div class="video-thumb" onclick="playVideo('${v.url||''}','${v.title}')">
+        <video src="${v.url||''}" preload="metadata" muted></video>
+        <div class="play-overlay">
+          <div class="play-btn-icon">
+            <svg width="14" height="16" fill="${'#1A1814'}"><polygon points="0,0 14,8 0,16"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-title-text">${v.title}</div>
+        <div class="video-date">${v.date}${isAdmin?`<button class="video-delete" onclick="deleteVideo(${i})">삭제</button>`:''}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function handleVideoSelect(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  pendingVideoFile=file;
+  pendingVideoUrl=URL.createObjectURL(file);
+  document.getElementById('videoMetaForm').classList.add('show');
+  document.getElementById('videoDate').value=new Date().toISOString().split('T')[0];
+}
+
+function uploadVideo(){
+  const title=document.getElementById('videoTitle').value.trim();
+  const date=document.getElementById('videoDate').value;
+  if(!title||!pendingVideoUrl) return;
+  const videos=gd('videos_'+currentStudentKey,[]);
+  // Store as object URL (session only — for persistent storage, would need server)
+  videos.unshift({title,date,url:pendingVideoUrl,filename:pendingVideoFile.name});
+  sd('videos_'+currentStudentKey,videos);
+  document.getElementById('videoTitle').value='';
+  document.getElementById('videoMetaForm').classList.remove('show');
+  pendingVideoFile=null; pendingVideoUrl=null;
+  document.getElementById('videoFileInput').value='';
+  renderVideos();
+}
+
+function cancelVideoUpload(){
+  document.getElementById('videoMetaForm').classList.remove('show');
+  pendingVideoFile=null; pendingVideoUrl=null;
+  document.getElementById('videoFileInput').value='';
+}
+
+function deleteVideo(idx){
+  if(!confirm('영상을 삭제하시겠습니까?')) return;
+  const videos=gd('videos_'+currentStudentKey,[]);
+  videos.splice(idx,1);
+  sd('videos_'+currentStudentKey,videos);
+  renderVideos();
+}
+
+function playVideo(url,title){
+  if(!url) return;
+  document.getElementById('modalVideo').src=url;
+  document.getElementById('modalVideoTitle').textContent=title;
+  document.getElementById('videoModal').classList.add('show');
+}
+function closeVideoModal(){
+  document.getElementById('videoModal').classList.remove('show');
+  document.getElementById('modalVideo').pause();
+  document.getElementById('modalVideo').src='';
+}
+
+// ─── RECITAL ───────────────────────────────────────────
+function renderRecital(){
+  const panel=document.getElementById('recitalAdminPanel');
+  panel.style.display=isAdmin?'block':'none';
+  const list=gd('recitals',[]);
+  const container=document.getElementById('recitalList');
+  const empty=document.getElementById('recitalEmpty');
+  container.innerHTML='';
+  if(!list.length){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.sort((a,b)=>new Date(a.date)-new Date(b.date));
+  list.forEach((r,i)=>{
+    const d=new Date(r.date+'T00:00:00');
+    const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const item=document.createElement('div');
+    item.className='recital-item';
+    item.innerHTML=`
+      <div class="recital-date-badge">
+        <div class="recital-month">${months[d.getMonth()]}</div>
+        <div class="recital-day">${d.getDate()}</div>
+      </div>
+      <div class="recital-body">
+        <div class="recital-title-text">${r.title}</div>
+        <div class="recital-detail">${r.time||''} ${r.venue?'| '+r.venue:''} ${r.detail?'| '+r.detail:''}</div>
+      </div>
+      <div class="recital-badge">리사이틀</div>
+      ${isAdmin?`<button class="delete-recital-btn" onclick="deleteRecital(${i})">×</button>`:''}`;
+    container.appendChild(item);
+  });
+}
+
+function addRecital(){
+  const title=document.getElementById('recitalTitle').value.trim();
+  const date=document.getElementById('recitalDate').value;
+  if(!title||!date) return;
+  const list=gd('recitals',[]);
+  list.push({
+    title,date,
+    time:document.getElementById('recitalTime').value.trim(),
+    venue:document.getElementById('recitalVenue').value.trim(),
+    detail:document.getElementById('recitalDetail').value.trim()
+  });
+  sd('recitals',list);
+  ['recitalTitle','recitalDate','recitalTime','recitalVenue','recitalDetail'].forEach(id=>document.getElementById(id).value='');
+  renderRecital();
+}
+
+function deleteRecital(i){
+  if(!confirm('일정을 삭제하시겠습니까?')) return;
+  const list=gd('recitals',[]);
+  list.splice(i,1);
+  sd('recitals',list);
+  renderRecital();
+}
+
+// ─── INFO ──────────────────────────────────────────────
+function loadInfo(){
+  if(!isAdmin) return;
+  const data=gd('academyInfo',{intro:'',phone:'',email:'',address:'',hours:''});
+  document.getElementById('infoIntro').value=data.intro||'';
+  document.getElementById('infoPhone').value=data.phone||'';
+  document.getElementById('infoEmail').value=data.email||'';
+  document.getElementById('infoAddress').value=data.address||'';
+  document.getElementById('infoHours').value=data.hours||'';
+  document.getElementById('infoAdminPanel').style.display='block';
+}
+
+function saveInfo(){
+  sd('academyInfo',{
+    intro:document.getElementById('infoIntro').value,
+    phone:document.getElementById('infoPhone').value,
+    email:document.getElementById('infoEmail').value,
+    address:document.getElementById('infoAddress').value,
+    hours:document.getElementById('infoHours').value
+  });
+  renderInfoDisplay();
+  const msg=document.getElementById('infoSaved');
+  msg.classList.add('show');
+  setTimeout(()=>msg.classList.remove('show'),2000);
+}
+
+function renderInfoDisplay(){
+  const data=gd('academyInfo',{intro:'',phone:'',email:'',address:'',hours:''});
+  document.getElementById('infoIntroDisplay').textContent=data.intro||(isAdmin?'학원 소개를 입력해주세요.':'(등록된 학원 소개가 없습니다)');
+  document.getElementById('infoPhoneDisplay').textContent=data.phone||'—';
+  document.getElementById('infoEmailDisplay').textContent=data.email||'—';
+  document.getElementById('infoAddressDisplay').textContent=data.address||'—';
+  document.getElementById('infoHoursDisplay').textContent=data.hours||'—';
+}
+
+// Close modals on backdrop click
+document.getElementById('lessonModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
+document.getElementById('videoModal').addEventListener('click',function(e){ if(e.target===this) closeVideoModal(); });
+</script>
+</body>
+</html>
